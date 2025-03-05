@@ -30,4 +30,38 @@ public class ProductController {
         productRepository.save(product); // Tagataustal: insert values into pictures
         return productRepository.findAll(); // Tagataustal: select * from pictures;
     }
+
+    @PostMapping("add-all-products")
+    public List<Product> saveAllProduct (@RequestBody List <Product> products) {
+        productRepository.saveAll(products); // Tagataustal: insert values into pictures
+        return productRepository.findAll(); // Tagataustal: select * from pictures;
+    }
+
+    //@RequestParam  localhost:8090/product?id=5
+    //@PathVariable   localhost:8090/product/5
+    @GetMapping("product")
+    public Product getProduct (@RequestParam Long id) {
+        return productRepository.findById(id).orElse(new Product());
+    }
+
+    @PutMapping("products")
+    public List<Product> editProduct (@RequestBody Product product) {
+        if (productRepository.findById(product.getId()).isPresent()) {
+            productRepository.save(product);
+        }
+        productRepository.save(product);
+        return productRepository.findAll();
+    }
+
+    // localhost:8090/products-by-category?category=electronics
+    @GetMapping("products-by-category")
+    public List <Product> getProductByCategory(@RequestParam String category) {
+        return productRepository.findByCategory(category);
+    }
+
+    @DeleteMapping("products")
+    public List <Product> deleteProduct (@RequestParam Long id) {
+        productRepository.deleteById(id);
+        return productRepository.findAll();
+    }
 }
